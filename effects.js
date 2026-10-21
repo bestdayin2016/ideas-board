@@ -60,8 +60,8 @@ export function startCamcorderClock(clockElementId) {
 // ----------------------------------------------------------------------------
 // 2. GLITTER CURSOR TRAIL (✦ ✧ ★)
 // ----------------------------------------------------------------------------
-const SPARKLE_CHARS = ['✦', '✧', '★', '✨', '･ﾟ'];
-const SPARKLE_COLORS = ['#ff77bc', '#70d6ff', '#ffd166', '#ffffff', '#b5179e', '#06d6a0'];
+const SPARKLE_CHARS = ['✦', '✧', '★', '✨', '🪔', '🌟', '･ﾟ'];
+const SPARKLE_COLORS = ['#ff77bc', '#70d6ff', '#ffd166', '#ffffff', '#ff9f1c', '#f77f00', '#d62828', '#06d6a0'];
 const activeParticles = [];
 const MAX_PARTICLES = 15;
 

@@ -75,6 +75,35 @@
   --viewfinder-text: #00ff66;
 }
 
+/* 🪔 Diwali Theme Overrides (Festival of Lights Y2K) */
+[data-theme="diwali"] {
+  --bg-gradient: linear-gradient(135deg, #2b0938 0%, #4a1231 50%, #68132b 100%);
+  --bg-pattern: radial-gradient(circle, rgba(255, 209, 102, 0.3) 1.5px, transparent 1.5px);
+
+  --panel-bg: rgba(45, 12, 38, 0.92);
+  --panel-border: 2px solid #ffd166;
+  --panel-shadow: 0 0 15px rgba(255, 183, 3, 0.35), inset 1px 1px 0px rgba(255, 209, 102, 0.4);
+
+  --window-header-bg: linear-gradient(90deg, #f77f00, #ffd166);
+  --window-header-text: #2b0938;
+
+  --text-main: #fffae6;
+  --text-muted: #f4c095;
+  --text-bright: #ffd166;
+
+  --aqua-btn-bg: linear-gradient(180deg, #ffe066 0%, #f77f00 50%, #d62828 100%);
+  --aqua-btn-text: #ffffff;
+  --aqua-btn-border: #ffd166;
+
+  --card-bg: #3a102a;
+  --card-border: 2px outset #f77f00;
+  --card-titlebar: linear-gradient(90deg, #68132b, #f77f00);
+
+  --viewfinder-border: #ffd166;
+  --viewfinder-bg: rgba(35, 8, 25, 0.92);
+  --viewfinder-text: #ffd166;
+}
+
 /* Respect system dark mode by default if theme attribute is not explicitly set */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="daytime"]) {

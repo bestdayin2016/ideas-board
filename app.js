@@ -161,21 +161,60 @@ document.addEventListener('DOMContentLoaded', () => {
 // ----------------------------------------------------------------------------
 // 4. THEME & SOUND CONTROLS
 // ----------------------------------------------------------------------------
+
+/**
+ * Checks whether the current date falls during the Diwali festival season
+ */
+function isDiwaliSeason(now = new Date()) {
+  const month = now.getMonth(); // 0-indexed: 9 = Oct, 10 = Nov
+  const date = now.getDate();
+  const year = now.getFullYear();
+
+  // Known main Diwali dates +/- 2 days festival window
+  const diwaliDates = {
+    2024: { month: 10, day: 1 },  // Nov 1 2024
+    2025: { month: 9, day: 20 },  // Oct 20 2025
+    2026: { month: 10, day: 8 },  // Nov 8 2026
+    2027: { month: 9, day: 29 },  // Oct 29 2027
+    2028: { month: 9, day: 17 },  // Oct 17 2028
+    2029: { month: 10, day: 5 },  // Nov 5 2029
+    2030: { month: 9, day: 26 },  // Oct 26 2030
+  };
+
+  const target = diwaliDates[year];
+  if (target) {
+    if (month === target.month && Math.abs(date - target.day) <= 2) {
+      return true;
+    }
+  }
+  // Fallback check for Diwali festival range (late Oct / early Nov)
+  return (month === 9 && date >= 18) || (month === 10 && date <= 12);
+}
+
 function initThemeAndSound() {
   const btnTheme = document.getElementById('btn-theme-toggle');
   const btnSound = document.getElementById('btn-sound-toggle');
 
-  // Load saved theme or fallback to prefers-color-scheme
+  // Load saved theme or auto-detect Diwali / system dark mode
   let savedTheme = localStorage.getItem('theme_preference');
   if (!savedTheme) {
-    savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'daytime';
+    if (isDiwaliSeason()) {
+      savedTheme = 'diwali';
+    } else {
+      savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'daytime';
+    }
   }
   applyTheme(savedTheme);
 
   if (btnTheme) {
     btnTheme.addEventListener('click', () => {
       const current = document.documentElement.getAttribute('data-theme') || 'daytime';
-      const newTheme = current === 'daytime' ? 'night' : 'daytime';
+      // 3-way theme loop: daytime -> night -> diwali -> daytime
+      let newTheme = 'daytime';
+      if (current === 'daytime') newTheme = 'night';
+      else if (current === 'night') newTheme = 'diwali';
+      else if (current === 'diwali') newTheme = 'daytime';
+
       applyTheme(newTheme);
       localStorage.setItem('theme_preference', newTheme);
     });
@@ -212,7 +251,13 @@ function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   const btnTheme = document.getElementById('btn-theme-toggle');
   if (btnTheme) {
-    btnTheme.textContent = theme === 'night' ? '☀️ Daytime' : '🌙 Night Cam';
+    if (theme === 'daytime') {
+      btnTheme.textContent = '🌙 Night Cam';
+    } else if (theme === 'night') {
+      btnTheme.textContent = '🪔 Diwali';
+    } else if (theme === 'diwali') {
+      btnTheme.textContent = '☀️ Daytime';
+    }
   }
 }
 
