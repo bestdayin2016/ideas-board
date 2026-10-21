@@ -12,8 +12,8 @@
 // NEVER paste or use your "service_role" key anywhere in client code!
 // ============================================================================
 
-export const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
-export const SUPABASE_ANON_KEY = "PASTE_YOUR_ANON_KEY_HERE";
+export const SUPABASE_URL = "https://cwwkcoxytngjrmjdyfyi.supabase.co";
+export const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3d2tjb3h5dG5nanJtamR5ZnlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1NzMzNTUsImV4cCI6MjEwODE0OTM1NX0.ga3jeNjm2RH8IHnvfWpCWlM_sxldB47r0eqirwDRDpY";
 
 /**
  * Checks whether the configuration placeholders have been replaced with real values.
