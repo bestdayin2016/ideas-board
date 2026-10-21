@@ -15,8 +15,8 @@
 export const SUPABASE_URL = "https://cwwkcoxytngjrmjdyfyi.supabase.co";
 export const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3d2tjb3h5dG5nanJtamR5ZnlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1NzMzNTUsImV4cCI6MjEwODE0OTM1NX0.ga3jeNjm2RH8IHnvfWpCWlM_sxldB47r0eqirwDRDpY";
 
-// Cloudflare Turnstile Site Key (Default is Cloudflare's official testing key "1x00000000000000000000AA")
-export const TURNSTILE_SITE_KEY = "1x00000000000000000000AA";
+// Cloudflare Turnstile Site Key
+export const TURNSTILE_SITE_KEY = "0x4AAAAAAFfKeHA56govJcgQ";
 
 /**
  * Checks whether the configuration placeholders have been replaced with real values.
