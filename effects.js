@@ -60,8 +60,8 @@ export function startCamcorderClock(clockElementId) {
 // ----------------------------------------------------------------------------
 // 2. GLITTER CURSOR TRAIL (✦ ✧ ★)
 // ----------------------------------------------------------------------------
-const SPARKLE_CHARS = ['✦', '✧', '★', '✨', '🪔', '🌟', '･ﾟ'];
-const SPARKLE_COLORS = ['#ff77bc', '#70d6ff', '#ffd166', '#ffffff', '#ff9f1c', '#f77f00', '#d62828', '#06d6a0'];
+const SPARKLE_CHARS = ['✦', '✧', '★', '✨', '･ﾟ'];
+const SPARKLE_COLORS = ['#ff77bc', '#70d6ff', '#ffd166', '#ffffff', '#b5179e', '#06d6a0'];
 const activeParticles = [];
 const MAX_PARTICLES = 15;
 
@@ -188,25 +188,7 @@ export function triggerSparkleBurst(targetElement) {
   }
 }
 
-/**
- * Fires multi-point festive fireworks burst for Diwali theme activation
- */
-export function triggerDiwaliFireworkBurst() {
-  if (isReducedMotion()) return;
 
-  const points = [
-    { x: window.innerWidth * 0.25, y: window.innerHeight * 0.3 },
-    { x: window.innerWidth * 0.50, y: window.innerHeight * 0.2 },
-    { x: window.innerWidth * 0.75, y: window.innerHeight * 0.3 }
-  ];
-
-  points.forEach((point, pIdx) => {
-    setTimeout(() => {
-      const dummy = { getBoundingClientRect: () => ({ left: point.x, top: point.y, width: 0, height: 0 }) };
-      triggerSparkleBurst(dummy);
-    }, pIdx * 180);
-  });
-}
 
 // ----------------------------------------------------------------------------
 // 4. WEBAUDIO SOFT CHIME (Sound feedback on submit & upvote)
