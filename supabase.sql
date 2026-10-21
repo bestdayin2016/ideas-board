@@ -28,6 +28,10 @@ RETURNS TRIGGER AS $$
 BEGIN
     NEW.votes := 0;
     NEW.created_at := now();
+    -- Trim whitespace from title
+    IF NEW.title IS NOT NULL THEN
+        NEW.title := trim(NEW.title);
+    END IF;
     -- Default empty or whitespace author name to Anonymous
     IF NEW.author_name IS NULL OR length(trim(NEW.author_name)) = 0 THEN
         NEW.author_name := 'Anonymous';

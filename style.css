@@ -232,6 +232,25 @@ body::before {
   z-index: 2;
 }
 
+/* VHS Tracking Glitch Band */
+.viewfinder-header::after {
+  content: "";
+  position: absolute;
+  top: -10px; left: 0; width: 100%; height: 3px;
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
+  pointer-events: none;
+  z-index: 3;
+  animation: vhs-glitch 7s ease-in-out infinite;
+}
+
+@keyframes vhs-glitch {
+  0%, 90%, 100% { top: -10px; opacity: 0; }
+  92% { top: 35%; opacity: 0.8; height: 4px; }
+  94% { top: 75%; opacity: 0.6; height: 2px; }
+  96% { top: 15%; opacity: 0.9; height: 5px; }
+}
+
 /* Viewfinder Corner Brackets */
 .bracket {
   position: absolute;

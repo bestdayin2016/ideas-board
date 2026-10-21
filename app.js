@@ -493,11 +493,30 @@ function createIdeaCardNode(idea, isVoted) {
     authorSpan.appendChild(newBadge);
   }
 
+  const rightSpan = document.createElement('span');
+  rightSpan.style.display = 'flex';
+  rightSpan.style.alignItems = 'center';
+  rightSpan.style.gap = '0.5rem';
+
   const timecodeSpan = document.createElement('span');
   timecodeSpan.textContent = formatCamcorderTimecode(createdDate);
 
+  const controlsSpan = document.createElement('div');
+  controlsSpan.className = 'os-controls';
+  controlsSpan.setAttribute('aria-hidden', 'true');
+
+  ['_', '□', '✕'].forEach(symbol => {
+    const osBtn = document.createElement('span');
+    osBtn.className = 'os-btn';
+    osBtn.textContent = symbol;
+    controlsSpan.appendChild(osBtn);
+  });
+
+  rightSpan.appendChild(timecodeSpan);
+  rightSpan.appendChild(controlsSpan);
+
   header.appendChild(authorSpan);
-  header.appendChild(timecodeSpan);
+  header.appendChild(rightSpan);
 
   // Card Body
   const body = document.createElement('div');
@@ -635,6 +654,8 @@ function initRealtimeSubscription() {
         if (payload.new) {
           addOrUpdateIdeaInMap(payload.new);
           renderFeed();
+          const firstCard = document.querySelector('.idea-card');
+          if (firstCard) triggerSparkleBurst(firstCard);
         }
       })
       .subscribe((status) => {
