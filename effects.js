@@ -188,6 +188,26 @@ export function triggerSparkleBurst(targetElement) {
   }
 }
 
+/**
+ * Fires multi-point festive fireworks burst for Diwali theme activation
+ */
+export function triggerDiwaliFireworkBurst() {
+  if (isReducedMotion()) return;
+
+  const points = [
+    { x: window.innerWidth * 0.25, y: window.innerHeight * 0.3 },
+    { x: window.innerWidth * 0.50, y: window.innerHeight * 0.2 },
+    { x: window.innerWidth * 0.75, y: window.innerHeight * 0.3 }
+  ];
+
+  points.forEach((point, pIdx) => {
+    setTimeout(() => {
+      const dummy = { getBoundingClientRect: () => ({ left: point.x, top: point.y, width: 0, height: 0 }) };
+      triggerSparkleBurst(dummy);
+    }, pIdx * 180);
+  });
+}
+
 // ----------------------------------------------------------------------------
 // 4. WEBAUDIO SOFT CHIME (Sound feedback on submit & upvote)
 // ----------------------------------------------------------------------------

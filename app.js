@@ -9,6 +9,7 @@ import {
   startCamcorderClock,
   initGlitterTrail,
   triggerSparkleBurst,
+  triggerDiwaliFireworkBurst,
   setAudioMuted,
   ensureAudioContext,
   playSubmitChime,
@@ -247,9 +248,23 @@ function initThemeAndSound() {
   }
 }
 
+function renderDiwaliFairyLights() {
+  const container = document.getElementById('diwali-lights');
+  if (!container || container.children.length > 0) return;
+
+  const bulbTypes = ['bulb-gold', 'bulb-red', 'bulb-green', 'bulb-cyan', 'bulb-magenta'];
+  for (let i = 0; i < 22; i++) {
+    const bulb = document.createElement('div');
+    bulb.className = `light-bulb ${bulbTypes[i % bulbTypes.length]}`;
+    container.appendChild(bulb);
+  }
+}
+
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   const btnTheme = document.getElementById('btn-theme-toggle');
+  const marquee = document.getElementById('marquee-text');
+
   if (btnTheme) {
     if (theme === 'daytime') {
       btnTheme.textContent = '🌙 Night Cam';
@@ -258,6 +273,19 @@ function applyTheme(theme) {
     } else if (theme === 'diwali') {
       btnTheme.textContent = '☀️ Daytime';
     }
+  }
+
+  if (marquee) {
+    if (theme === 'diwali') {
+      marquee.textContent = '🪔 HAPPY DIWALI! ★ SHINE BRIGHT & SHARE UR IDEAS ★ HAPPY DEEPAVALI (^_^) ★ NO LOGIN 4 EVER ★ BEST VIEWED AT 1024x768 ★';
+    } else {
+      marquee.textContent = '★ WELCOME TO MY IDEAS PAGE ★ SIGN THE BOARD ★ LEAVE UR IDEA (^_^) ★ NO LOGIN 4 EVER ★ BEST VIEWED AT 1024x768 ★';
+    }
+  }
+
+  if (theme === 'diwali') {
+    renderDiwaliFairyLights();
+    triggerDiwaliFireworkBurst();
   }
 }
 
