@@ -10,7 +10,9 @@ import {
   initGlitterTrail,
   triggerSparkleBurst,
   setAudioMuted,
-  playSubmitChime
+  ensureAudioContext,
+  playSubmitChime,
+  playUpvoteChime
 } from './effects.js';
 
 // ----------------------------------------------------------------------------
@@ -184,12 +186,24 @@ function initThemeAndSound() {
   setAudioMuted(savedMuted);
   updateSoundButtonUI(savedMuted);
 
+  // Global user interaction listener to unlock WebAudio context
+  const unlockAudioOnUserGesture = () => {
+    ensureAudioContext();
+  };
+  window.addEventListener('click', unlockAudioOnUserGesture, { once: true });
+  window.addEventListener('keydown', unlockAudioOnUserGesture, { once: true });
+
   if (btnSound) {
     btnSound.addEventListener('click', () => {
       savedMuted = !savedMuted;
       setAudioMuted(savedMuted);
       localStorage.setItem('sound_muted', savedMuted.toString());
       updateSoundButtonUI(savedMuted);
+
+      if (!savedMuted) {
+        ensureAudioContext();
+        playSubmitChime(); // Play instant test chime when unmuting sound!
+      }
     });
   }
 }
@@ -595,6 +609,7 @@ async function handleUpvote(ideaId, voteBtn) {
   voteBtn.disabled = true;
   voteBtn.textContent = `★ Cool! (${idea.votes})`;
   triggerSparkleBurst(voteBtn);
+  playUpvoteChime();
 
   try {
     const { data, error } = await supabase.rpc('upvote_idea', { idea_id: ideaId });

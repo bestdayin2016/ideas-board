@@ -189,53 +189,102 @@ export function triggerSparkleBurst(targetElement) {
 }
 
 // ----------------------------------------------------------------------------
-// 4. WEBAUDIO SOFT CHIME (Sound feedback on submit)
+// 4. WEBAUDIO SOFT CHIME (Sound feedback on submit & upvote)
 // ----------------------------------------------------------------------------
 export function setAudioMuted(muted) {
   isAudioMuted = muted;
+}
+
+export function ensureAudioContext() {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass) {
+      audioCtx = new AudioContextClass();
+    }
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
 }
 
 export function playSubmitChime() {
   if (isAudioMuted || isReducedMotion()) return;
 
   try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
+    const ctx = ensureAudioContext();
+    if (!ctx) return;
 
-    if (!audioCtx) {
-      audioCtx = new AudioContextClass();
-    }
+    const renderSound = () => {
+      const now = ctx.currentTime;
 
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
+      const playNote = (freq, startTime, duration) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
-    const now = audioCtx.currentTime;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, startTime);
 
-    // Create dual sine synth tones for retro 2000s chime (e.g. C5 -> G5)
-    const playNote = (freq, startTime, duration) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.2, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, startTime);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
 
-      gain.gain.setValueAtTime(0.15, startTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+      };
 
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(startTime);
-      osc.stop(startTime + duration);
+      // Retro Y2K 4-note ascending bell chime: C5 (523Hz) -> E5 (659Hz) -> G5 (784Hz) -> C6 (1046Hz)
+      playNote(523.25, now, 0.2);
+      playNote(659.25, now + 0.08, 0.2);
+      playNote(783.99, now + 0.16, 0.22);
+      playNote(1046.50, now + 0.24, 0.4);
     };
 
-    // Upward retro bell chime: C5 (523.25Hz), E5 (659.25Hz), G5 (783.99Hz)
-    playNote(523.25, now, 0.25);
-    playNote(659.25, now + 0.08, 0.25);
-    playNote(783.99, now + 0.16, 0.4);
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(() => renderSound());
+    } else {
+      renderSound();
+    }
 
   } catch (err) {
     console.warn("WebAudio chime unable to play:", err);
+  }
+}
+
+export function playUpvoteChime() {
+  if (isAudioMuted || isReducedMotion()) return;
+
+  try {
+    const ctx = ensureAudioContext();
+    if (!ctx) return;
+
+    const renderSound = () => {
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(587.33, now); // D5
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.12); // A5
+
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.15);
+    };
+
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(() => renderSound());
+    } else {
+      renderSound();
+    }
+  } catch (err) {
+    console.warn("WebAudio upvote chime unable to play:", err);
   }
 }
