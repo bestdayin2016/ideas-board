@@ -1,0 +1,691 @@
+/* ============================================================================
+   IDEAS BOARD - Y2K RETRO 2002 STYLESHEET
+   Visual Direction: "2002 Internet Dream" / Camcorder Tape / Glossy Aqua / Chrome
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   1. COLOR PALETTE & CSS VARIABLES
+   ---------------------------------------------------------------------------- */
+:root {
+  /* Daytime Palette (Pastel Y2K) */
+  --bg-gradient: linear-gradient(135deg, #a0c4ff 0%, #ffc6ff 50%, #e7c6ff 100%);
+  --bg-pattern: radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px);
+  --bg-pattern-size: 20px 20px;
+
+  --panel-bg: rgba(255, 255, 255, 0.88);
+  --panel-border: 2px solid #ffffff;
+  --panel-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15), inset 1px 1px 0px #ffffff;
+
+  --window-header-bg: linear-gradient(90deg, #3a86ff, #ff007f);
+  --window-header-text: #ffffff;
+
+  --text-main: #1d1e2c;
+  --text-muted: #5c5f78;
+  --text-bright: #3a86ff;
+
+  --accent-lime: #70e000;
+  --accent-pink: #ff007f;
+  --accent-cyan: #00f5d4;
+  --rec-red: #ff0033;
+
+  --aqua-btn-bg: linear-gradient(180deg, #62cff4 0%, #2c9cdb 50%, #1a75bb 51%, #4cb8eb 100%);
+  --aqua-btn-text: #ffffff;
+  --aqua-btn-border: #135d97;
+  --aqua-btn-shadow: 0px 3px 6px rgba(0,0,0,0.3), inset 0px 1px 0px rgba(255,255,255,0.8);
+
+  --card-bg: #ffffff;
+  --card-border: 2px outset #e2e8f0;
+  --card-titlebar: linear-gradient(90deg, #70d6ff, #ff70a6);
+
+  --viewfinder-border: #333333;
+  --viewfinder-bg: rgba(0, 0, 0, 0.75);
+  --viewfinder-text: #00ff66;
+
+  --font-wordart: 'Fredoka', 'Bungee', 'Pacifico', cursive, sans-serif;
+  --font-body: 'Tahoma', 'Verdana', 'Trebuchet MS', sans-serif;
+  --font-camcorder: 'VT323', 'Press Start 2P', monospace;
+}
+
+/* Night Cam Theme Overrides */
+[data-theme="night"] {
+  --bg-gradient: linear-gradient(135deg, #03045e 0%, #001233 50%, #001845 100%);
+  --bg-pattern: radial-gradient(circle, rgba(0,255,102,0.15) 1px, transparent 1px);
+
+  --panel-bg: rgba(10, 25, 47, 0.92);
+  --panel-border: 2px solid #00ff66;
+  --panel-shadow: 0 0 12px rgba(0, 255, 102, 0.25), inset 1px 1px 0px rgba(0, 255, 102, 0.3);
+
+  --window-header-bg: linear-gradient(90deg, #0077b6, #00f5d4);
+  --window-header-text: #000000;
+
+  --text-main: #e0fbfc;
+  --text-muted: #94d2bd;
+  --text-bright: #00ff66;
+
+  --aqua-btn-bg: linear-gradient(180deg, #00f5d4 0%, #00b4d8 50%, #0077b6 51%, #0096c7 100%);
+  --aqua-btn-text: #000000;
+  --aqua-btn-border: #00ff66;
+
+  --card-bg: #0b132b;
+  --card-border: 2px outset #1c2541;
+  --card-titlebar: linear-gradient(90deg, #1c2541, #3a506b);
+
+  --viewfinder-border: #00ff66;
+  --viewfinder-bg: rgba(0, 20, 10, 0.9);
+  --viewfinder-text: #00ff66;
+}
+
+/* Respect system dark mode by default if theme attribute is not explicitly set */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="daytime"]) {
+    --bg-gradient: linear-gradient(135deg, #03045e 0%, #001233 50%, #001845 100%);
+    --bg-pattern: radial-gradient(circle, rgba(0,255,102,0.15) 1px, transparent 1px);
+    --panel-bg: rgba(10, 25, 47, 0.92);
+    --panel-border: 2px solid #00ff66;
+    --panel-shadow: 0 0 12px rgba(0, 255, 102, 0.25), inset 1px 1px 0px rgba(0, 255, 102, 0.3);
+    --window-header-bg: linear-gradient(90deg, #0077b6, #00f5d4);
+    --window-header-text: #000000;
+    --text-main: #e0fbfc;
+    --text-muted: #94d2bd;
+    --text-bright: #00ff66;
+    --aqua-btn-bg: linear-gradient(180deg, #00f5d4 0%, #00b4d8 50%, #0077b6 51%, #0096c7 100%);
+    --aqua-btn-text: #000000;
+    --aqua-btn-border: #00ff66;
+    --card-bg: #0b132b;
+    --card-border: 2px outset #1c2541;
+    --card-titlebar: linear-gradient(90deg, #1c2541, #3a506b);
+    --viewfinder-border: #00ff66;
+    --viewfinder-bg: rgba(0, 20, 10, 0.9);
+    --viewfinder-text: #00ff66;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   2. GLOBAL BASE STYLES
+   ---------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-main);
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  min-height: 100vh;
+  line-height: 1.5;
+  padding-bottom: 2rem;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background Sparkle Pattern Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: var(--bg-pattern);
+  background-size: var(--bg-pattern-size);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Focus outline for keyboard navigation */
+:focus-visible {
+  outline: 3px solid var(--accent-pink) !important;
+  outline-offset: 2px;
+}
+
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ----------------------------------------------------------------------------
+   3. IN-PAGE CONFIGURATION & BANNER ALERTS
+   ---------------------------------------------------------------------------- */
+.alert-banner {
+  background: #ff0055;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 3px solid #b3003b;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  font-family: var(--font-body);
+  position: relative;
+  z-index: 100;
+}
+
+.alert-banner a {
+  color: #ffff00;
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------------------
+   4. RETRO CSS MARQUEE
+   ---------------------------------------------------------------------------- */
+.marquee-container {
+  width: 100%;
+  background: #000000;
+  color: #00ff66;
+  font-family: var(--font-camcorder);
+  font-size: 1.25rem;
+  padding: 0.25rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--accent-pink);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.marquee-content {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee-scroll 18s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
+/* ----------------------------------------------------------------------------
+   5. CAMCORDER HEADER & VHS EFFECTS
+   ---------------------------------------------------------------------------- */
+.viewfinder-header {
+  background: var(--viewfinder-bg);
+  border: 3px solid var(--viewfinder-border);
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  color: var(--viewfinder-text);
+  font-family: var(--font-camcorder);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 0 15px rgba(0,255,102,0.2);
+}
+
+/* VHS Scanline Overlay */
+.scanlines {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0,0,0,0.3) 50%,
+    rgba(0,0,0,0.3)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Viewfinder Corner Brackets */
+.bracket {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--viewfinder-text);
+  border-style: solid;
+  pointer-events: none;
+}
+.bracket-tl { top: 8px; left: 8px; border-width: 3px 0 0 3px; }
+.bracket-tr { top: 8px; right: 8px; border-width: 3px 3px 0 0; }
+.bracket-bl { bottom: 8px; left: 8px; border-width: 0 0 3px 3px; }
+.bracket-br { bottom: 8px; right: 8px; border-width: 0 3px 3px 0; }
+
+.camcorder-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.rec-indicator {
+  color: var(--rec-red);
+  font-weight: bold;
+  animation: rec-blink 1.2s infinite steps(1);
+}
+
+@keyframes rec-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.1; }
+}
+
+.play-mode {
+  color: #00ff66;
+}
+
+.battery-icon {
+  font-size: 1.1rem;
+}
+
+/* WordArt Main Title with Glitch/Chroma Effect */
+.wordart-title {
+  font-family: var(--font-wordart);
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0.5rem 0;
+  background: linear-gradient(180deg, #ffffff 0%, #ff70a6 50%, #ff007f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(3px 3px 0px #3a86ff) drop-shadow(-1px -1px 0px #000000);
+  position: relative;
+  letter-spacing: 2px;
+}
+
+.header-subtitle {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+  margin-bottom: 1rem;
+}
+
+/* Header Action Controls (Theme + Sound Switches) */
+.header-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ----------------------------------------------------------------------------
+   6. GLOSSY AQUA BUTTONS & PILL CONTROLS
+   ---------------------------------------------------------------------------- */
+.btn-aqua {
+  background: var(--aqua-btn-bg);
+  color: var(--aqua-btn-text);
+  border: 1.5px solid var(--aqua-btn-border);
+  border-radius: 20px;
+  padding: 0.5rem 1.25rem;
+  font-family: var(--font-body);
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: var(--aqua-btn-shadow);
+  transition: transform 0.15s ease, filter 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn-aqua:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.btn-aqua:active {
+  transform: translateY(1px);
+  box-shadow: inset 0px 2px 4px rgba(0,0,0,0.4);
+}
+
+.btn-aqua:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+  transform: none !important;
+}
+
+.btn-sm {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* ----------------------------------------------------------------------------
+   7. HERO META ROW (Badge, Counter, Webring)
+   ---------------------------------------------------------------------------- */
+.hero-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--panel-bg);
+  border: var(--panel-border);
+  box-shadow: var(--panel-shadow);
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.under-construction-badge {
+  background: #fff3bf;
+  color: #742a2a;
+  border: 2px dashed #f59f00;
+  padding: 0.25rem 0.6rem;
+  font-weight: bold;
+  font-size: 0.85rem;
+  border-radius: 4px;
+}
+
+.visitor-counter {
+  font-family: var(--font-camcorder);
+  font-size: 1.3rem;
+  background: #000000;
+  color: #00ff66;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #00ff66;
+  letter-spacing: 2px;
+}
+
+.pixel-badges-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pixel-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  font-family: var(--font-body);
+  font-weight: bold;
+  color: #ffffff;
+  background: #333333;
+  border: 2px outset #ffffff;
+  text-decoration: none;
+  box-shadow: 1px 1px 0px #000;
+}
+
+.badge-blue { background: #0077b6; }
+.badge-pink { background: #ff007f; }
+.badge-green { background: #38b000; }
+
+/* ----------------------------------------------------------------------------
+   8. OS WINDOW PANELS (Forms & Cards)
+   ---------------------------------------------------------------------------- */
+.os-window {
+  background: var(--panel-bg);
+  border: var(--panel-border);
+  box-shadow: var(--panel-shadow);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.os-titlebar {
+  background: var(--window-header-bg);
+  color: var(--window-header-text);
+  padding: 0.4rem 0.75rem;
+  font-weight: bold;
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-body);
+}
+
+.os-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.os-btn {
+  width: 16px;
+  height: 16px;
+  background: #e2e8f0;
+  border: 1px outset #ffffff;
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+  font-weight: bold;
+  color: #000000;
+  user-select: none;
+  border-radius: 2px;
+}
+
+.os-window-content {
+  padding: 1.25rem;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 2px inset #cbd5e1;
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #000000;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.char-counter {
+  display: block;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Hidden Honeypot Field */
+.hp-field {
+  display: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* ----------------------------------------------------------------------------
+   9. IDEAS FEED & FEED CONTROLS
+   ---------------------------------------------------------------------------- */
+.feed-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 220px;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Idea Card Styling */
+.idea-card {
+  background: var(--card-bg);
+  border: var(--card-border);
+  border-radius: 6px;
+  margin-bottom: 1.25rem;
+  box-shadow: 2px 3px 8px rgba(0,0,0,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.idea-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 6px 14px rgba(0,0,0,0.18);
+}
+
+.card-header {
+  background: var(--card-titlebar);
+  padding: 0.5rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-family: var(--font-camcorder);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.card-author {
+  font-weight: bold;
+  font-family: var(--font-body);
+  color: #ffffff;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+}
+
+.badge-new {
+  background: #ff007f;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: bold;
+  font-size: 0.65rem;
+  padding: 1px 5px;
+  border-radius: 3px;
+  animation: badge-pulse 1s infinite alternate;
+  margin-left: 0.5rem;
+}
+
+@keyframes badge-pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+}
+
+.card-desc {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  margin-bottom: 0.8rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.6rem;
+  border-top: 1px dashed #cbd5e1;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.btn-report {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.btn-report:hover {
+  color: var(--rec-red);
+}
+
+/* ----------------------------------------------------------------------------
+   10. RAINBOW HR & FOOTER
+   ---------------------------------------------------------------------------- */
+.rainbow-hr {
+  height: 4px;
+  border: none;
+  background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+  margin: 2rem 0 1rem 0;
+  border-radius: 2px;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  padding: 1rem 0;
+}
+
+/* ----------------------------------------------------------------------------
+   11. ACCESSIBILITY & PREFERS-REDUCED-MOTION
+   ---------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .marquee-content {
+    animation: none !important;
+    padding-left: 0;
+    white-space: normal;
+  }
+
+  .rec-indicator, .badge-new {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .scanlines {
+    display: none !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   12. RESPONSIVE BREAKPOINTS
+   ---------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  .hero-meta-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .camcorder-status-bar {
+    font-size: 1.05rem;
+  }
+
+  .card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
