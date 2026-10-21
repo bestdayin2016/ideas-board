@@ -249,14 +249,21 @@ function setupCounter(inputId, counterId, max) {
 
 function initTurnstileWidget() {
   const container = document.getElementById('turnstile-container');
-  if (!container || !TURNSTILE_SITE_KEY) return;
+  if (!container) return;
+
+  if (!TURNSTILE_SITE_KEY || TURNSTILE_SITE_KEY.trim().length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'flex';
 
   const renderWidget = () => {
     if (window.turnstile && typeof window.turnstile.render === 'function') {
       try {
         container.innerHTML = '';
         window.turnstile.render('#turnstile-container', {
-          sitekey: TURNSTILE_SITE_KEY,
+          sitekey: TURNSTILE_SITE_KEY.trim(),
           theme: 'auto',
         });
       } catch (err) {
