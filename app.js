@@ -4,7 +4,7 @@
 // ============================================================================
 
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
-import { SUPABASE_URL, SUPABASE_ANON_KEY, isConfigured } from './config.js';
+import { SUPABASE_URL, SUPABASE_ANON_KEY, TURNSTILE_SITE_KEY, isConfigured } from './config.js';
 import {
   startCamcorderClock,
   initGlitterTrail,
@@ -91,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Setup input character counters
   initCharCounters();
+
+  // Initialize Cloudflare Turnstile widget
+  initTurnstileWidget();
 
   // Check configuration
   if (!isConfigured()) {
@@ -244,6 +247,29 @@ function setupCounter(inputId, counterId, max) {
   update();
 }
 
+function initTurnstileWidget() {
+  const container = document.getElementById('turnstile-container');
+  if (!container || !TURNSTILE_SITE_KEY) return;
+
+  const renderWidget = () => {
+    if (window.turnstile && typeof window.turnstile.render === 'function') {
+      try {
+        container.innerHTML = '';
+        window.turnstile.render('#turnstile-container', {
+          sitekey: TURNSTILE_SITE_KEY,
+          theme: 'auto',
+        });
+      } catch (err) {
+        console.warn("Turnstile render error:", err);
+      }
+    } else {
+      setTimeout(renderWidget, 300);
+    }
+  };
+
+  renderWidget();
+}
+
 // ----------------------------------------------------------------------------
 // 6. FORM SUBMISSION & SAFETY CHECKS
 // ----------------------------------------------------------------------------
@@ -277,7 +303,16 @@ async function handleFormSubmit(e) {
     return;
   }
 
-  // 3. Inputs extraction & sanitize
+  // 3. Turnstile bot check
+  if (window.turnstile && TURNSTILE_SITE_KEY) {
+    const token = window.turnstile.getResponse('#turnstile-container') || window.turnstile.getResponse();
+    if (!token) {
+      statusMsg.textContent = 'please complete the bot check above! (^_^)';
+      return;
+    }
+  }
+
+  // 4. Inputs extraction & sanitize
   const titleInput = document.getElementById('input-title');
   const descInput = document.getElementById('input-description');
   const authorInput = document.getElementById('input-author');
@@ -339,9 +374,12 @@ async function handleFormSubmit(e) {
     triggerSparkleBurst(btnSubmit);
     playSubmitChime();
 
-    // Reset Form
+    // Reset Form & Turnstile
     document.getElementById('idea-form').reset();
     initCharCounters();
+    if (window.turnstile) {
+      try { window.turnstile.reset('#turnstile-container'); } catch (e) {}
+    }
 
     // Add new card to feed if returned
     if (data && data.length > 0) {
